@@ -4,11 +4,13 @@ import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import advancedDatabase from "../indexDb";
+import { useLiveQuery } from "dexie-react-hooks";
 
 export default function Login() {
   const navigate = useNavigate();
   const [values, setValues] = useState({ username: "", password: "" });
-  const user=JSON.parse(localStorage.getItem("user"))
+  const [usrconteList,setUsrconteList]=useState([])
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -16,7 +18,16 @@ export default function Login() {
     draggable: true,
     theme: "dark",
   };
- 
+
+  const contectDataIndexdb = useLiveQuery(
+    () => advancedDatabase.contectData.toArray(),
+    []
+  );
+
+  useEffect(()=>{
+   
+    contectDataIndexdb && setUsrconteList(contectDataIndexdb)
+  },[contectDataIndexdb])
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -34,21 +45,34 @@ export default function Login() {
   };
 
   const handleSubmit = async (event) => {
-    validateForm()
-    event?.preventDefault();
-    if(user){
-      if(user.password!==values.password){
-        return toast.error("Password is not valid.", toastOptions);
-  
-      }else if(user.username!==values.username){
-         toast.error("Username is not valid.", toastOptions);
-      }
-      return navigate("/");
-    }else{
-      toast.error("You need to Create account", toastOptions);
-    }
+    event?.preventDefault(); // Prevent default form submission
+    validateForm(); // Ensure the form is validated
     
+    if (!usrconteList || usrconteList.length === 0) {
+      return toast.error("You need to create an account", toastOptions);
+    }
+  
+    const matchedUser = usrconteList.find(
+      (user) =>
+        user.username === values.username && user.password === values.password
+    );
+  
+    if (matchedUser) {
+      localStorage.setItem("user", JSON.stringify(values));
+      navigate("/"); // Redirect to the homepage
+    } else {
+      // Show appropriate error message
+      const userExists = usrconteList.some((user) => user.username === values.username);
+      if (userExists) {
+        toast.error("Password is not valid.", toastOptions);
+      } else {
+        toast.error("Username is not valid.", toastOptions);
+      }
+    }
   };
+
+  console.log(usrconteList,"usrconteList");
+  
 
   return (
     <>

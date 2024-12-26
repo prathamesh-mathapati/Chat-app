@@ -1,6 +1,8 @@
 import Dexie from "dexie";
 
-const advancedPTEDatabase = new Dexie("UserData");
-advancedPTEDatabase.version(1).stores({
+const advancedDatabase = new Dexie("UserData");
+advancedDatabase.version(1).stores({
     contectData: "++id",
   });
+
+  export default advancedDatabase;

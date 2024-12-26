@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Await } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import advancedPTEDatabase from "../indexDb";
+import advancedDatabase from "../indexDb";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export default function Register() {
     event.preventDefault();
     if (handleValidation()) {
       localStorage.setItem("user",JSON.stringify(values))
-      advancedPTEDatabase.UserData.add(values);
+     await advancedDatabase.contectData.add(values);
       navigate("/");
     }
   };

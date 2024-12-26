@@ -8,20 +8,11 @@ import { init, id } from '@instantdb/react';
 const db = init({
   appId: "8c62fb94-751e-455c-94c8-996264c39bc9",
 });
-
-function addMessage(text) {
-  db.transact(
-    db.tx.messages[id()].update({
-      text,
-      createdAt: new Date(),
-      sendby:"prathamesh",
-      sendto:"unkwno"
-    }),
-  );
-}
+const user= JSON.parse(localStorage.getItem("user"))
 
 
-export default function ChatInput({ handleSendMsg }) {
+
+export default function ChatInput({ handleSendMsg,currentChat }) {
   const [msg, setMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const handleEmojiPickerhideShow = () => {
@@ -33,7 +24,18 @@ export default function ChatInput({ handleSendMsg }) {
     message += emojiObject.emoji;
     setMsg(message);
   };
-
+  function addMessage(text) {
+    db.transact(
+      db.tx.messages[id()].update({
+        text,
+        createdAt: new Date(),
+        sendby:user.username,
+        sendto:currentChat.username,
+        username:user.username
+  
+      }),
+    );
+  }
   const sendChat = (e) => {
     e.preventDefault();
           addMessage(e.target[0].value);
@@ -52,15 +54,6 @@ export default function ChatInput({ handleSendMsg }) {
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
       </div>
-      {/* <form className="input-container" onSubmit={(event) => sendChat(event)}>
-        <input
-          type="text"
-          placeholder="type your message here"
-          onChange={(e) => setMsg(e.target.value)}
-          value={msg}
-        />
-       
-      </form> */}
       <form
        className="input-container"
         onSubmit={(e) =>  sendChat(e)}

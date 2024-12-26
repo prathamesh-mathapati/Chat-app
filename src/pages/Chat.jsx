@@ -6,7 +6,7 @@ import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 
 export default function Chat() {
-  const [contacts, setContacts] = useState([{_id:1,username:"prathamesh",avatarImage:"mkmk"},{_id:1,username:"mathapati",avatarImage:"mkmk"}]);
+  const [contactsBy, setContactsBy] = useState("");
   const [currentChat, setCurrentChat] = useState(undefined);
   const navigate = useNavigate();
   useEffect(() => {
@@ -17,17 +17,17 @@ export default function Chat() {
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
+  // console.log(currentChat,"currentChat");
+  
 
   return (
     <>
       <Container>
         <div className="container">
-          <Contacts contacts={contacts} changeChat={handleChatChange} />
-          {currentChat !== undefined ? (
-            <Welcome />
-          ) : (
-            <ChatContainer currentChat={{_id:1,username:"mkmk",avatarImage:"ppp"}} />
-          )}
+          <Contacts changeChat={handleChatChange} />
+
+            <ChatContainer currentChat={currentChat} />
+          
         </div>
       </Container>
     </>

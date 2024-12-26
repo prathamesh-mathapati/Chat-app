@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
+import advancedDatabase from "../indexDb";
+import { useLiveQuery } from "dexie-react-hooks";
 
-export default function Contacts({ contacts, changeChat }) {
+export default function Contacts({changeChat}) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const contectDataIndexdb = useLiveQuery(
+    () => advancedDatabase.contectData.toArray(),
+    []
+  );
+  const user= JSON.parse(localStorage.getItem("user"))
+
   useEffect( () => {
-    // const data = await JSON.parse(
-    //   localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-    // );
-    setCurrentUserName("prathamesh");
+    setCurrentUserName(user.username);
     setCurrentUserImage("😀")}, []);
+
+    const changeCurrentChat=(contact)=>{
+      changeChat(contact)
+    }
 
   return (
     <>
@@ -22,14 +31,14 @@ export default function Contacts({ contacts, changeChat }) {
             <h3>ChatApp</h3>
           </div>
           <div className="contacts">
-            {contacts.map((contact, index) => {
+            {contectDataIndexdb && contectDataIndexdb.map((contact, index) => {
               return (
                 <div
                   key={contact._id}
                   className={`contact ${
                     index === currentSelected ? "selected" : ""
                   }`}
-                  // onClick={() => changeCurrentChat(index, contact)}
+                  onClick={() => changeCurrentChat(contact)}
                 >
                   <div className="avatar">
                     <img

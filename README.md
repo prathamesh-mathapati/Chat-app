@@ -1,5 +1,5 @@
-Runtime Chat App
-Description
+# Runtime Chat App
+Description 
 This project involves developing a runtime chat application. The purpose is to create a dynamic platform for real-time communication using React.js, following the company's provided documentation.
 
 Target Audience

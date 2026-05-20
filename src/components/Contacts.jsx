@@ -15,7 +15,10 @@ export default function Contacts({changeChat}) {
   const user= JSON.parse(localStorage.getItem("user"))
 
   useEffect( () => {
-    setCurrentUserName(user.username);
+    if(user.username){
+      setCurrentUserName(user.username);
+    }
+    
     setCurrentUserImage("😀")}, []);
 
     const changeCurrentChat=(contact)=>{

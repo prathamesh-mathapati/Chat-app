@@ -24,7 +24,7 @@ export default function ChatContainer({ currentChat }) {
     (a, b) =>
       new Date(a.createdAt) - new Date(b.createdAt),
   );
-// console.log(sortedMessages,"sortedMessages");
+console.log(sortedMessages,"sortedMessages",currentChat,"currentChat",user);
 
   return (
     <Container>
@@ -43,11 +43,11 @@ export default function ChatContainer({ currentChat }) {
         {sortedMessages?.map((message) => {
     
           return (
-            message?.username===user?.username &&  message?.username ===currentChat?.username &&
+            message?.username===user?.username &&  message?.sendby ===currentChat?.username||message?.sendto ===currentChat?.username && message?.text&&
             <div  key={uuidv4()}>
               <div
                 className={`message ${
-                  message?.username===currentChat?.username ? "sended" : "recieved"
+                  message?.sendby!==currentChat?.username ? "sended" : "recieved"
                 }`}
               >
                 <div className="content ">
